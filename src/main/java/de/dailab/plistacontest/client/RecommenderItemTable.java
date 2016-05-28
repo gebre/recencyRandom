@@ -20,7 +20,9 @@ DEALINGS IN THE SOFTWARE.
 package de.dailab.plistacontest.client;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -50,6 +52,17 @@ public class RecommenderItemTable {
 		return true;
 	}
 
+	//Random recommender, it picks 
+	public  List<Long> pickNRandom(List<Long> lst, Set <Long> blacklListed,  int n) {
+	    List<Long> copy = new LinkedList<Long>(lst);
+	    for(Long el: blacklListed){
+	    	copy.remove(el);
+	    }
+	    Collections.shuffle(copy);
+	    return copy.subList(0, n);
+	}
+	
+	
 	/**
 	 * Return something from the buffer.
 	 * @param _currentRequest
@@ -70,10 +83,10 @@ public class RecommenderItemTable {
 		Set<Long> blackListedIDs = new HashSet<Long>();
 		blackListedIDs.add(0L);
 		blackListedIDs.add(itemID);
-		Set<Long> result = table.getValuesByKey(domainID+"", numberOfRequestedResults.intValue(), blackListedIDs);
+		Set<Long> result = table.getValuesByKey(domainID+"", 100, blackListedIDs);
 		
 		List<Long> returnResult = new ArrayList<Long>();
 		returnResult.addAll(result);
-		return returnResult;
+		return  pickNRandom(returnResult, blackListedIDs,  numberOfRequestedResults.intValue()); //returnResult;
 	}
 }

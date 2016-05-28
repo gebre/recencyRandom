@@ -168,6 +168,7 @@ public class ContestHandler
         			response = resultList.toString();
         		}
         		response = getRecommendationResultJSON(response);
+        		logger.info("recommendation_response" + "\t" + response);
         		
         	    // TODO? might handle the the request as impressions
         	} catch (Throwable t) {
